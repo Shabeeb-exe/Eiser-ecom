@@ -1,0 +1,64 @@
+{% extends 'seller-dashboard.html' %}
+<head>
+    <title>{% block title %}Update Offer - Eiser{% endblock %}</title>
+</head>
+<body>
+{%block body%}
+<div class="container">
+    <h2>Edit Offer</h2>
+    
+    <form action="/edit_offer_post/" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="id" id="name" value="{{offer.id}}">
+        <div class="form-group">
+            <label for="product">Product</label>
+            <input type="text" name="product" id="product" class="form-control" value="{{offer.product.name}}" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="coupon">Coupon Code</label>
+            <input type="text" id="coupon" name="coupon" value="{{coupon.coupon}}" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="coupon">Coupon Discount</label>
+            <input type="number" id="cdiscount" name="cdiscount" value="{{coupon.cdiscount}}" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="discount">Discount (%)</label>
+            <input type="number" id="discount" name="discount" value="{{offer.discount}}" class="form-control" step="0.01">
+        </div>
+        
+        <div class="form-group">
+            <label for="validity_start">Validity Start Date</label>
+            <input type="date" id="validity_start" name="sdate" value="{{offer.sdate}}" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="validity_end">Validity End Date</label>
+            <input type="date" id="validity_end" name="edate" value="{{offer.edate}}" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary mb-5">Update Offer</button>
+    </form>
+</div>
+<script>
+    document.getElementById('discount').addEventListener('input', function () {
+        const value = parseFloat(this.value);
+        if (value < 0 || value > 100) {
+            alert('Discount must be between 0 and 100.');
+            this.value = '';
+        }
+    });
+    document.getElementById('validity_end').addEventListener('change', function () {
+        const startDate = new Date(document.getElementById('validity_start').value);
+        const endDate = new Date(this.value);
+        if (endDate < startDate) {
+            alert('End date cannot be earlier than start date.');
+            this.value = '';
+        }
+    });
+</script>  
+{%endblock%}
+</body>
