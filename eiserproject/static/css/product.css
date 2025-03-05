@@ -1,0 +1,18 @@
+
+.file-input {
+    width: 100%;
+    height: auto;
+    color: rgb(120, 120, 120);
+    border: 3px dashed #5bc0de;
+    border-radius: 10px;
+    padding: 1.6rem;
+    font-size: 1.6rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    width: 100%;
+    cursor: pointer;
+}
+
