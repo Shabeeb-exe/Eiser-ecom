@@ -1,0 +1,124 @@
+{% extends 'seller-dashboard.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  {% load indian_numbers_tags %}
+  {% load custom_filters %}
+  <title>{% block title %}View Products - Eiser{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'vendors/lightbox/simpleLightbox.css' %}" />
+  <style>
+    .more-images {
+      font-size: 12px;
+      color: #007bff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  {%block body%}
+  <!--================Home Banner Area =================-->
+  <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div class="banner_content d-md-flex justify-content-between align-items-center">
+            <div class="mb-3 mb-md-0">
+              <h2>Products</h2>
+              <p>Products added by you.</p>
+            </div>
+            <div class="page_link">
+              <a href="/seller_dashboard/">Dashboard</a>
+              <a href="/view_products/">View Products</a>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!--================End Home Banner Area =================-->
+  <section class="cart_area">
+    <div class="container">
+      <div class="cart_inner">
+        <div class="table-responsive">
+          <table class="table">
+              <thead>
+                  <tr>
+                      <th>Sl No.</th>
+                      <th>Product Name</th>
+                      <th>Brand</th>
+                      <th>Price</th>
+                      <th>Description</th>
+                      <th>Sub Category</th>
+                      <!-- <th>In Stock</th> -->
+                      <th>Thumbnail</th>
+                      <th>Images</th>
+                      <th>Videos</th>
+                      <th>Actions</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for product in products %}
+                  <tr>
+                      <td>{{ forloop.counter }}</td>
+                      <td>{{ product.name }}</td>
+                      <td>{{ product.brand }}</td>
+                      <td>₹{{ product.price|floatcomma_indian|remove_decimal_if_zero }}</td>
+                      <td class="truncate-text" title="{{product.desc}}">{{ product.desc }}</td>
+                      <td>{{ product.subcategory.name }}</td>
+                      <!-- <td>{{ product.instock }}</td> -->
+                      <td><img src="{{ product.thumbnail.url }}" alt="Thumbnail" width="50"></td>
+                      <td>
+                        {% with product.images.all as images %}
+                        {% if images %}
+                        <div style="position: relative; display: inline-block; width: 120px;">
+                            <!-- First image with +more tag -->
+                            <a href="{{ images.0.image.url }}" data-lightbox="product-images-{{ product.id }}" data-title="Product Images">
+                                <img src="{{ images.0.image.url }}" alt="Image" width="50" class="me-2">
+                                {% if images|length > 1 %}
+                                <span
+                                    style="
+                                        position: absolute;
+                                        bottom: -10px;
+                                        left: 40px;
+                                        background-color: #333;
+                                        color: #fff;
+                                        padding: 2px 6px;
+                                        border-radius: 12px;
+                                        font-size: 12px;
+                                        cursor: pointer;
+                                    "
+                                >
+                                    +{{ images|length|add:"-1" }} more
+                                </span>
+                                {% endif %}
+                            </a>
+                        </div>
+                        <!-- Hidden links for additional images -->
+                        {% for image in images|slice:"1:" %}
+                        <a href="{{ image.image.url }}" data-lightbox="product-images-{{ product.id }}" data-title="Product Images" style="display:none;"></a>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                    </td>
+                    <td>
+                        {% for video in product.videos.all %}
+                        <a href="{{ video.video.url }}" target="_blank">View Video</a><br>
+                        {% endfor %}
+                    </td>
+                    <td><a href="/edit_product/{{product.id}}/"><i class="fa fa-pencil m-2" style="color: rgb(0, 0, 0); font-size: 30px;"></i></a>
+                    <a href="/delete_product/{{product.id}}/" onclick="return confirm('Are you sure you want to delete this product?');"><i class="fa fa-trash m-2" style="color: red; font-size: 30px;"></i></a></td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                      <td colspan="10" class="text-center">No products added yet.</td>
+                  </tr>
+                  <tr><td colspan="10"></td></tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>      
+{%endblock%}    
+</body>
+</html>
