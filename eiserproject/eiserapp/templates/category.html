@@ -1,0 +1,288 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    {% load indian_numbers_tags %}
+    {% load custom_filters %}
+    <title>{% block title %}{{ category.name }} - Eiser ecommerce{% endblock %}</title>
+  </head>
+
+  <body>
+    {% block body %}
+    <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div class="banner_content d-md-flex justify-content-between align-items-center">
+            <div class="mb-3 mb-md-0">
+              <h2>{{ category.name }}</h2>
+              <p>Shop {{ category.name }}, Tailored to Your Needs.</p>
+            </div>
+            <div class="page_link">
+              <a href="/index/">Home</a>
+              <a href="/category/{{ category.id }}/">{{ category.name }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+    <!--================Category Product Area =================-->
+    <section class="cat_product_area section_gap">
+      <div class="container">
+        <div class="row flex-row-reverse">
+          <div class="col-lg-9">
+            {% for subcategory, products in products_by_subcategory.items %}
+              <div class="subcategory_section mt-3">
+                <div class="product_top_bar d-flex justify-content-between align-items-center mt-3">
+                  <h4>{{ subcategory.name }}</h4>
+                  <a href="/subcategory/{{subcategory.id}}/" class="btn btn-success btn-sm">View All</a>
+                </div>
+                <div class="latest_product_inner">
+                  <div class="row">
+                    {% if products|length > 3 %}
+                      <div class="product-carousel">
+                        {% for product in products %}
+                          <div class="col-lg-4 col-md-6">
+                            <div class="single-product">
+                              <div class="product-img">
+                                <a href="{% url 'single_product' product.id %}">
+                                  <img class="card-img" src="{{ product.thumbnail.url }}" alt="{{ product.name }}" />
+                                </a>
+                                <div class="p_icon" style="display: flex; justify-content: center;">
+                                  <form action="/add_to_wishlist/" method="POST">
+                                    <input type="hidden" name="p_id" value="{{ product.id }}">
+                                    <input type="hidden" name="qty" value="1">
+                                    {% csrf_token %}
+                                    <button type="submit" style="all: unset;">
+                                      <a href=""><i class="ti-heart"></i></a>
+                                    </button>
+                                  </form> 
+                                  <form action="/add_to_cart/" method="POST">
+                                    <input type="hidden" name="p_id" value="{{ product.id }}">
+                                    <input type="hidden" name="qty" value="1">
+                                    {% csrf_token %}
+                                    <button type="submit" class="ml-4" style="all: unset;">
+                                      <a href=""><i class="ti-shopping-cart"></i></a>
+                                    </button>
+                                  </form>
+                                </div>
+                              </div>
+                              <div class="product-btm">
+                                <a href="{% url 'single_product' product.id %}" class="d-block">
+                                  <h4>{{ product.name }}</h4>
+                                </a>
+                                <div class="mt-3">
+                                  {% if product.discounted_price == product.price %}
+                                    <span class="mr-4">₹{{ product.price|floatcomma_indian|remove_decimal_if_zero|remove_decimal_if_zero }}</span>
+                                  {% else %}
+                                    <span class="mr-4">₹{{ product.discounted_price|floatcomma_indian|remove_decimal_if_zero }}</span>
+                                    <del>₹{{ product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                                  {% endif %}
+                                </div>
+                                <div class="mt-2">
+                                  <div>
+                                    <span title="{{ product.overall_rating }}/5">
+                                      <small>
+                                        {% for i in "12345"|make_list %}
+                                          <i class="fa fa-star{% if product.overall_rating < i|add:"-0.5" %}-o{% elif product.overall_rating < i %}-half-o{% endif %}" aria-hidden="true"></i>
+                                        {% endfor %}
+                                      </small>
+                                    </span>
+                                    <span><small><strong>( {{ product.overall_rating }}/5 )</strong></small></span>
+                                    <h6>{{ product.total_ratings }} Ratings & {{ product.total_reviews }} Reviews</h6>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    {% else %}
+                      {% for product in products %}
+                        <div class="col-lg-4 col-md-6">
+                          <div class="single-product">
+                            <div class="product-img">
+                              <a href="{% url 'single_product' product.id %}">
+                                <img class="card-img" src="{{ product.thumbnail.url }}" alt="{{ product.name }}" />
+                              </a>
+                              <div class="p_icon" style="display: flex; justify-content: center;">
+                                <form action="/add_to_wishlist/" method="POST">
+                                  <input type="hidden" name="p_id" value="{{ product.id }}">
+                                  <input type="hidden" name="qty" value="1">
+                                  {% csrf_token %}
+                                  <button type="submit" style="all: unset;">
+                                    <a href=""><i class="ti-heart"></i></a>
+                                  </button>
+                                </form> 
+                                <form action="/add_to_cart/" method="POST">
+                                  <input type="hidden" name="p_id" value="{{ product.id }}">
+                                  <input type="hidden" name="qty" value="1">
+                                  {% csrf_token %}
+                                  <button type="submit" class="ml-4" style="all: unset;">
+                                    <a href=""><i class="ti-shopping-cart"></i></a>
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                            <div class="product-btm">
+                              <a href="{% url 'single_product' product.id %}" class="d-block">
+                                <h4>{{ product.name }}</h4>
+                              </a>
+                              <div class="mt-3">
+                                {% if product.discounted_price == product.price %}
+                                  <span class="mr-4">₹{{ product.price|floatcomma_indian|remove_decimal_if_zero|remove_decimal_if_zero }}</span>
+                                {% else %}
+                                  <span class="mr-4">₹{{ product.discounted_price|floatcomma_indian|remove_decimal_if_zero }}</span>
+                                  <del>₹{{ product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                                {% endif %}
+                              </div>
+                              <div class="mt-2">
+                                <div>
+                                  <span title="{{ product.overall_rating }}/5">
+                                    <small>
+                                      {% for i in "12345"|make_list %}
+                                        <i class="fa fa-star{% if product.overall_rating < i|add:"-0.5" %}-o{% elif product.overall_rating < i %}-half-o{% endif %}" aria-hidden="true"></i>
+                                      {% endfor %}
+                                    </small>
+                                  </span>
+                                  <span><small><strong>( {{ product.overall_rating }}/5 )</strong></small></span>
+                                  <h6>{{ product.total_ratings }} Ratings & {{ product.total_reviews }} Reviews</h6>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    {% endif %}    
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+          
+          <!-- SORT AND FILTER -->
+          <div class="col-lg-3">
+            <div class="left_sidebar_area">
+              <!-- Main Filters Form -->
+              <form id="main-filter-form" method="GET" action="{% url 'filter_category_products' category.id %}">
+                <!-- Subcategories Filter -->
+                <aside class="left_widgets p_filter_widgets mt-4">
+                  <div class="l_w_title">
+                    <h3>Subcategories</h3>
+                  </div>
+                  <div class="widgets_inner">
+                    <ul class="list">
+                      {% for subcategory in subcategories %}
+                        <li>
+                          <label>
+                            <input type="checkbox" name="subcategories" value="{{ subcategory.id }}"
+                              {% if subcategory.id|stringformat:"s" in selected_subcategories %}checked{% endif %}>
+                            {{ subcategory.name }}
+                          </label>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </aside>
+
+                <!-- Brand Filter -->
+                <aside class="left_widgets p_filter_widgets mt-4">
+                  <div class="l_w_title">
+                    <h3>Brands</h3>
+                  </div>
+                  <div class="widgets_inner">
+                    <ul class="list">
+                      {% for brand in brands %}
+                        <li>
+                          <label>
+                            <input type="checkbox" name="brands" value="{{ brand }}"
+                              {% if brand in selected_brands %}checked{% endif %}>
+                            {{ brand }}
+                          </label>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </aside>
+
+                <!-- Rating Filter -->
+                <aside class="left_widgets p_filter_widgets mt-4">
+                  <div class="l_w_title">
+                    <h3>Ratings</h3>
+                  </div>
+                  <div class="widgets_inner">
+                    <ul class="list">
+                      <li>
+                        <label>
+                          <input type="checkbox" name="ratings" value="4.5-5.0" {% if '4.5-5.0' in selected_ratings %}checked{% endif %}>
+                          4.5 - 5.0
+                        </label>
+                      </li>
+                      <li>
+                        <label>
+                          <input type="checkbox" name="ratings" value="4.0-4.5" {% if '4.0-4.5' in selected_ratings %}checked{% endif %}>
+                          4.0 - 4.5
+                        </label>
+                      </li>
+                      <li>
+                        <label>
+                          <input type="checkbox" name="ratings" value="3.5-4.0" {% if '3.5-4.0' in selected_ratings %}checked{% endif %}>
+                          3.5 - 4.0
+                        </label>
+                      </li>
+                      <li>
+                        <label>
+                          <input type="checkbox" name="ratings" value="3.0-3.5" {% if '3.0-3.5' in selected_ratings %}checked{% endif %}>
+                          3.0 - 3.5
+                        </label>
+                      </li>
+                      <li>
+                        <label>
+                          <input type="checkbox" name="ratings" value="0.0-3.5" {% if '0.0-3.5' in selected_ratings %}checked{% endif %}>
+                          Below 3.5
+                        </label>
+                      </li>
+                    </ul>
+                  </div>
+                </aside>
+
+                <!-- Price Filter -->
+                <aside class="left_widgets p_filter_widgets">
+                  <div class="l_w_title">
+                    <h3>Price Filter</h3>
+                  </div>
+                  <div class="widgets_inner">
+                    <div class="range_item">
+                      <div id="slider-range"></div>
+                      <div class="">
+                        <label for="amount">Price : </label>
+                        <input type="text" id="amount" style="width: 150px;" readonly />
+                      </div>
+                    </div>
+                    <!-- Hidden inputs for min_price and max_price -->
+                    <input type="hidden" name="min_price" id="min_price" value="{{ min_price }}">
+                    <input type="hidden" name="max_price" id="max_price" value="{{ max_price }}">
+                  </div>
+                </aside>
+
+                <!-- Main Apply Filters Button -->
+                <button type="submit" class="btn btn-success btn-block mt-3">Apply Filters</button>
+              </form>
+
+              <!-- Clear All Filters Button -->
+              {% if any_filters_applied %}
+                <a href="{% url 'filter_category_products' category.id %}" class="btn btn-danger btn-block mt-3">
+                  Clear All Filters
+                </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>   
+    <!--================End Category Product Area =================-->
+    {% endblock %}
+  </body>  
+</html> 
