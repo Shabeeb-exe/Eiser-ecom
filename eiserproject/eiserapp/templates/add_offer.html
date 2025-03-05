@@ -1,0 +1,87 @@
+{% extends 'seller-dashboard.html' %}
+<head>
+    <title>{% block title %}Add Offer - Eiser{% endblock %}</title>
+</head>
+<body>
+{%block body%}
+  <!--================Home Banner Area =================-->
+  <section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+      <div class="container">
+        <div
+          class="banner_content d-md-flex justify-content-between align-items-center"
+        >
+          <div class="mb-3 mb-md-0">
+            <h2>Add Offer</h2>
+            <p>Add offers for your products. Fill all the required <span class="text-danger">*</span> fields.</p>
+          </div>
+          <div class="page_link">
+            <a href="/seller_dashboard/">Dashboard</a>
+            <a href="/add_offer/">Add Offer</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================End Home Banner Area =================-->
+<div class="container my-5">
+    <form action="/add_offer_post/" method="POST">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="product">Select Product</label>
+            <select name="product" id="product" class="form-control" required>
+                <option value="" selected disabled>Select a Product</option>
+                {% for i in product %}
+                    <option value="{{ i.id }}">{{ i.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="coupon" class=" mt-3">Coupon Code</label>
+            <input type="text" id="coupon" name="coupon" class="form-control">
+        </div>
+
+        <div class="form-group">
+            <label for="cdiscount">Coupon Discount</label>
+            <input type="number" id="cdiscount" name="cdiscount" class="form-control">
+        </div>
+        
+        <div class="form-group">
+            <label for="discount">Offer Discount (%)</label>
+            <input type="number" id="discount" name="discount" class="form-control" step="0.01">
+        </div>
+        
+        <div class="form-group">
+            <label for="validity_start">Validity Start Date</label>
+            <input type="date" id="validity_start" name="sdate" class="form-control" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="validity_end">Validity End Date</label>
+            <input type="date" id="validity_end" name="edate" class="form-control" required>
+        </div>
+        
+        <button type="submit" class="btn btn-primary mb-5">Add Offer</button>
+    </form>
+</div>
+<script>
+    document.getElementById('discount').addEventListener('input', function () {
+        const value = parseFloat(this.value);
+        if (value < 0 || value > 100) {
+            alert('Discount must be between 0 and 100.');
+            this.value = '';
+        }
+    });
+    document.getElementById('validity_end').addEventListener('change', function () {
+        const startDate = new Date(document.getElementById('validity_start').value);
+        const endDate = new Date(this.value);
+        if (endDate < startDate) {
+            alert('End date cannot be earlier than start date.');
+            this.value = '';
+        }
+    });
+</script>  
+{%endblock%}
+</body>
