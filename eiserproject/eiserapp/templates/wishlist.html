@@ -1,0 +1,98 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    {% load indian_numbers_tags %}
+    {% load custom_filters %}
+    <title>{% block title %}Wishlist - Eiser ecommerce{% endblock %}</title>
+  </head>
+
+  <body>
+    {%block body%}
+
+    <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div class="banner_content d-md-flex justify-content-between align-items-center">
+            <div class="mb-3 mb-md-0">
+              <h2>Wishlist</h2>
+              <p>Discover. Wishlist. Shop.</p>
+            </div>
+            <div class="page_link">
+              <a href="/index/">Home</a>
+              <a href="/wishlist/">Wishlist</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+    <!--================Wishlist Area =================-->
+    <section class="cart_area">
+        <div class="container">
+          <div class="cart_inner">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for item in wishlist %}
+                      <tr>
+                        <!-- <input type="hidden" name="cart_id" id="cart_id" value="{{item.product.id}}">     -->
+                        <td onclick="window.location.href = '/single_product/{{ item.product.id }}/';">
+                          <div class="media">
+                            <div class="d-flex">
+                              <div class="thumbnail-container">
+                                <img
+                                  src="{{ item.product.thumbnail.url }}"
+                                  alt="{{ item.product.name }}"
+                                  class="uniform-thumbnail"
+                                />
+                              </div>
+                            </div>
+                            <div class="media-body">
+                              <p>{{ item.product.name }}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td onclick="window.location.href = '/single_product/{{ item.product.id }}/';">
+                          {% if item.discounted_price %}
+                            <h5>₹{{ item.discounted_price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                            <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                          {% else %}
+                            <h5>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                          {% endif %}
+                        </td>                           
+                        <td><a href="/remove_wishlist_item/{{ item.id }}/" title="Remove item" onclick="return confirm('Are you sure you want to remove this item?');"><i class="fa fa-trash m-2" style="color: red; font-size: 30px;"></i></a></td>
+                      </tr>
+                      {% empty %}
+                      <tr>
+                        <td colspan="4">
+                          <p>Your Wishlist is empty.</p>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                      <tr>
+                        <td colspan="4">
+                          <div class="checkout_btn_inner">
+                            <a class="gray_btn mx-2" href="/category/">Continue Shopping</a>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+    </section>                
+    <!--================End Wishlist Area =================-->
+    {% endblock %}
+   </body> 
+</html>
