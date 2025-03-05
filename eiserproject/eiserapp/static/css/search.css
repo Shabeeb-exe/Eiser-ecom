@@ -1,0 +1,111 @@
+/* Search bar styling */
+.search-bar {
+    position: relative; /* Ensure the dropdowns are positioned relative to the search bar */
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    border-radius: 20px;
+    padding: 5px 10px;
+    width: 380px;
+    height: 40px; /* Adjusted height to match nav links */
+    border: 1px solid #ddd; /* Add a border to match the design */
+}
+
+@media (max-width: 1200px) {
+	.search-bar{
+		width: 290px;
+	}
+}
+
+
+#search-input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    padding: 5px;
+    height: 100%; /* Ensure input takes full height of the search bar */
+}
+
+#search-icon {
+    color: #000;
+    margin-left: 5px;
+    cursor: pointer;
+    background: none;
+}
+
+#search-history {
+    position: absolute;
+    top: 100%; /* Position below the search bar */
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    z-index: 1000;
+    margin-top: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none; /* Hide by default */
+}
+
+#search-suggestions {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    z-index: 1000;
+    margin-top: 5px;
+    max-height: 300px;
+    overflow-y: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: none; /* Hide by default */
+}
+
+#search-history ul, #search-suggestions {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#search-history li, #search-suggestions .suggestion-item {
+    margin: 0 10px !important;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#search-history li:hover, #search-suggestions .suggestion-item:hover {
+    background-color: #f1f1f1;
+}
+
+#suggestions-label {
+    padding: 10px;
+    margin: 0;
+    font-size: 0.9em;
+    color: #666;
+    display: none; /* Hide by default */
+}
+
+.suggestion-type {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.history-item.selected,
+.suggestion-item.selected {
+    background-color: #f0f0f0; /* Light gray background */
+    outline: 2px solid #007bff; /* Blue outline */
+}
+
+.delete-search {
+    color: red;
+    margin-left: 10px;
+}
+
+#clear-all {
+    color: red;
+    cursor: pointer;
+}
