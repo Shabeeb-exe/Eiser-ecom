@@ -1,0 +1,80 @@
+{% extends 'seller-dashboard.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  {% load indian_numbers_tags %}
+  {% load custom_filters %}
+  <title>{% block title %}View Offers - Eiser{% endblock %}</title>
+</head>
+<body>
+  {%block body%}
+  <!--================Home Banner Area =================-->
+  <section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+      <div class="container">
+        <div class="banner_content d-md-flex justify-content-between align-items-center">
+          <div class="mb-3 mb-md-0">
+            <h2>Offers</h2>
+            <p>Offers added by you.</p>
+          </div>
+          <div class="page_link">
+            <a href="/seller_dashboard/">Dashboard</a>
+            <a href="/view_offers/">View Offers</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================End Home Banner Area =================-->
+  <section class="cart_area">
+    <div class="container">
+      <div class="cart_inner">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Coupon Code</th>
+                        <th>Coupon Discount</th>
+                        <th>Discount (%)</th>
+                        <th>Offer Price</th>
+                        <th>Validity Start</th>
+                        <th>Validity End</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offer in offers %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ offer.product.name }}</td>
+                        <td>{{ offer.product.price|floatcomma_indian|remove_decimal_if_zero }}</td>
+                        <td>{{ offer.product.coupon_set.first.coupon|default:"N/A" }}</td>
+                        <td>{{ offer.product.coupon_set.first.cdiscount|default:"N/A" }}</td>
+                        <td>{{ offer.discount }}</td>
+                        <td>{{ offer.final_price|floatcomma_indian|remove_decimal_if_zero }}</td>
+                        <td>{{ offer.sdate }}</td>
+                        <td>{{ offer.edate }}</td>
+                        <td>
+                            <a href="/edit_offer/{{ offer.id }}/"><i class="fa fa-pencil m-2" style="color: rgb(0, 0, 0); font-size: 30px;"></i></a>
+                            <a href="/remove_offer/{{ offer.id }}/" onclick="return confirm('Are you sure you want to remove this offer?');"><i class="fa fa-trash m-2" style="color: red; font-size: 30px;"></i></a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">No offers available</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>  
+    </div>
+  </section>    
+{%endblock%}    
+</body>
+</html>
