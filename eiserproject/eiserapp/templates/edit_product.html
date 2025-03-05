@@ -1,0 +1,97 @@
+{% extends 'seller-dashboard.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <title>{%block title%} Edit Product - Eiser {%endblock%}</title>
+</head>
+
+<body>
+  {%block body%}
+  <!--================Header Menu Area =================-->
+
+  <!--================Header Menu Area =================-->
+    <div class="container">
+        <h2>Edit Product</h2>
+        <form action="/edit_product_post/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="hidden" name="id" id="name" value="{{product.id}}">
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input type="text" id="name" name="name" value="{{product.name}}" class="form-control" required>
+            </div>            
+            
+            <div class="form-group">
+                <label for="brand">Brand</label>
+                <input type="text" id="brand" name="brand" value="{{product.brand}}" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text" id="price" name="price" value="{{product.price}}" class="form-control" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="desc">Description</label>
+                <textarea id="desc" name="desc" class="form-control" rows="4" required>{{product.desc}}</textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="subcategory">Sub Category</label>
+              <select name="subcategory" id="subcategory" class="form-control" required>
+                <option value="{{product.subcategory.id}}">{{product.subcategory.name}}</option>
+                {% for i in subcategory %}
+                    {% if not i.id == product.subcategory.id %}
+                        <option value="{{i.id}}">{{i.name}}</option>
+                    {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- <div class="form-group">
+              <label for="instock">Quantity in stock</label>
+              <input type="number" id="instock" name="instock" value="{{product.instock}}" class="form-control" step="0.01" required>
+          </div> -->
+            
+            <div class="form-group">
+              <label for="thumbnail">Product Thumbnail</label>
+              <div id="thumb_drop">
+                {% if product.thumbnail %}
+                    <img src="{{ product.thumbnail.url }}" alt="Thumbnail" style="max-width: 100px; max-height: 100px;">
+                {% endif %}
+                <input class="file-input my-3" name="thumbnail" type="file" value="{{product.thumbnail.url}}" accept="image/*">
+              </div>
+            </div> 
+
+            <div class="form-group">
+              <label for="images">Product Images</label>
+              <div id="img_drop">
+                {% for img in product.images.all %}
+                    <img src="{{ img.image.url }}" alt="Image" style="max-width: 100px; max-height: 100px; margin: 5px;">
+                {% endfor %}
+                <input class="file-input my-3" name="image" type="file" value="{{product.image.url}}" accept="image/*" multiple>
+              </div>
+            </div>  
+          
+            <div class="form-group">
+              <label for="videos">Product Videos</label>
+              <div id="vid_drop">
+                {% for vid in product.videos.all %}
+                    <video src="{{ vid.video.url }}" controls style="max-width: 200px; max-height: 200px; margin: 5px;"></video>
+                {% endfor %}
+                <input class="file-input my-3" name="video" value="{{product.video.url}}" type="file" accept="video/*" multiple>
+              </div>
+            </div>  
+
+          <button type="submit" class="btn btn-primary mb-5">Update Product</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/file-handler.js' %}"></script>
+    <script src="{% static 'js/validate.js' %}"></script>
+    
+</body>
+{%endblock%}
+</html>
