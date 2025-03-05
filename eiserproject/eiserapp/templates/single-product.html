@@ -1,0 +1,407 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    {% load indian_numbers_tags %}
+    {% load custom_filters %}
+    <title>{% block title %}{{product.name}} - Eiser ecommerce{% endblock %}</title>
+  </head>
+
+  <body>
+    {%block body%}
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div
+            class="banner_content d-md-flex justify-content-between align-items-center"
+          >
+            <div class="mb-3 mb-md-0">
+              <h2>{{product.name}}</h2>
+              <p>{{product.brand}}</p>
+            </div>
+            <div class="page_link">
+              <a href="/category/">Shop</a>
+              <a href="/single_product/">{{product.name}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+
+    <!--================Single Product Area =================-->
+    <div class="product_image_area">
+      <div class="container">
+        <div class="row s_product_inner">
+          <div class="col-lg-6">
+            <div class="s_product_img">
+              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <!-- Carousel Preview Images and Videos -->
+                <div class="preview-wrapper">
+                  <ol class="carousel-indicators">
+                    {% for img in product.images.all %}
+                    <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}">
+                      <img src="{{ img.image.url }}" alt="Product Image Thumbnail" class="preview-thumbnail" />
+                    </li>
+                    {% endfor %}
+                    {% for vid in product.videos.all %}
+                    <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter|add:total_images }}">
+                      <video class="preview-thumbnail" src="{{ vid.video.url }}" muted></video>
+                    </li>
+                    {% endfor %}
+                  </ol>
+                </div>
+          
+                <!-- Big Display Images and Videos -->
+                <div class="carousel-inner">
+                  {% for img in product.images.all %}
+                  <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img class="d-block w-100 carousel-media" src="{{ img.image.url }}" alt="Product Image" />
+                  </div>
+                  {% endfor %}
+                  {% for vid in product.videos.all %}
+                  <div class="carousel-item">
+                    <video class="d-block w-100 carousel-media" controls muted loop autoplay>
+                      <source src="{{ vid.video.url }}" type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  </div>
+                  {% endfor %}
+                </div>
+          
+                <!-- Arrow indicators for main display -->
+                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+            </div>
+          </div>
+            <div class="col-lg-5 offset-lg-1">
+            <div class="s_product_text">
+              <h3>{{product.name}}</h3>
+              {% if offers %}
+                {% for offer in offers %}
+                  <h2>₹{{ offer.final_price|floatcomma_indian|remove_decimal_if_zero }}</h2>
+                  <del style="font-size: 20px;">₹{{ offer.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                {% endfor %}
+              {% endif %} 
+              <ul class="list">
+                <li>
+                  <a class="active" href="#">
+                    <span>Category</span> : {{product.subcategory}}</a
+                  >
+                </li>
+                <li>
+                  <a href="#">
+                    <span>Availability</span> : 
+                    {% if is_in_stock %}
+                      {{ product.instock }} in stock.
+                    {% else %}
+                      <span class="text-danger">Sorry! Product Out of stock!</span> 
+                    {% endif %}
+                  </a>
+                </li>
+              </ul>
+              <p></p>
+              <form method="POST" action="/add_to_cart/">
+                <input type="hidden" name="p_id" id="p_id" value="{{product.id}}">
+                {% csrf_token %}
+                <div class="product_count">
+                  <label for="qty">Quantity:</label>
+                  <input
+                    type="text"
+                    name="qty"
+                    id="sst"
+                    maxlength="12"
+                    value="1"
+                    title="Quantity:"
+                    class="input-text qty"
+                  />
+                  <button
+                    onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                    class="increase items-count"
+                    type="button"
+                  >
+                    <i class="lnr lnr-chevron-up"></i>
+                  </button>
+                  <button
+                    onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                    class="reduced items-count"
+                    type="button"
+                  >
+                    <i class="lnr lnr-chevron-down"></i>
+                  </button>
+                </div>
+                <div class="card_area">
+                  <button type="submit" class="main_btn">Add to Cart</button>
+                  <a class="icon_btn" href="#">
+                    <i class="lnr lnr lnr-heart"></i>
+                  </a>
+                </div>
+              </form> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--================End Single Product Area =================-->
+
+    <!--================Product Description Area =================-->
+    <section class="product_description_area">
+      <div class="container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              id="home-tab"
+              data-toggle="tab"
+              href="#home"
+              role="tab"
+              aria-controls="home"
+              aria-selected="true"
+              >Description</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link active"
+              id="review-tab"
+              data-toggle="tab"
+              href="#review"
+              role="tab"
+              aria-controls="review"
+              aria-selected="false"
+              >Reviews</a
+            >
+          </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+          <div
+            class="tab-pane fade"
+            id="home"
+            role="tabpanel"
+            aria-labelledby="home-tab"
+          >
+            <p>{{product.desc}}</p>
+          </div>
+
+          <div
+            class="tab-pane fade show active"
+            id="review"
+            role="tabpanel"
+            aria-labelledby="review-tab"
+          >
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="row total_rate">
+                  <div class="col-6">
+                    <div class="box_total">
+                      <h5>Overall</h5>
+                      <h4>{{ overall_rating }}</h4>
+                      <h6>({{ total_ratings }} Ratings <br>& {{ total_reviews }} Reviews)</h6>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="rating_list">
+                      <h3>Based on {{ total_ratings }} Ratings</h3>
+                      <ul class="list">
+                        <li>
+                          <a href="#"
+                            >5 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i> {{ star_counts.5 }}</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#"
+                            >4 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i> {{ star_counts.4 }}</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#"
+                            >3 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i> {{ star_counts.3 }}</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#"
+                            >2 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i> {{ star_counts.2 }}</a
+                          >
+                        </li>
+                        <li>
+                          <a href="#"
+                            >1 Star
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i>
+                            <i class="fa fa-star-o"></i> {{ star_counts.1 }}</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                {% for review in reviews %}
+                <div class="review_list">                  
+                  <div class="review_item mt-3">
+                    <div class="media">
+                      <div class="d-flex">
+                        <img
+                          src="{{ review.user.photo.url }}"
+                          alt=" {{ review.user.name }} Profile Image"
+                          style="width: 50px; border-radius: 100px;"
+                        />
+                      </div>
+                      <div class="media-body">
+                        <h4>{{ review.user.name }}</h4>
+                        <!-- <div>{{ review.rating }}</div> -->
+                        <div>
+                          <span title="{{ review.rating }}/5">
+                            <!-- By default the star is full else it is empty otherwise it is half -->
+                                <i class="fa fa-star{% if review.rating < 0.5%}-o{% elif review.rating >= 0.5 and review.rating < 1 %}-half-o{% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if review.rating < 1.5%}-o{% elif review.rating >= 1.5 and review.rating < 2 %}-half-o{% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if review.rating < 2.5%}-o{% elif review.rating >= 2.5 and review.rating < 3 %}-half-o{% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if review.rating < 3.5%}-o{% elif review.rating >= 3.5 and review.rating < 4 %}-half-o{% endif %}" aria-hidden="true"></i>
+                                <i class="fa fa-star{% if review.rating < 4.5%}-o{% elif review.rating >= 4.5 and review.rating < 5 %}-half-o{% endif %}" aria-hidden="true"></i>
+                            </span>
+                            <span><strong>( {{ review.rating }}/5 )</strong></span>
+                        </div>
+                      </div>
+                    </div>
+                    <p>{{ review.comment }}</p>
+                    <small>{{ review.pdate }}</small>
+                  </div>
+                </div>
+                {% empty %}
+                <p>No reviews yet.</p>
+                {% endfor %}
+              </div>
+              <div class="col-lg-6">
+                <div class="review_box" style="position: relative;">
+                  <h4>Add a Review</h4>
+                  <p>Your Rating:</p>
+                  <form
+                  class="row contact_form"
+                  action="/review_post/{{ product.id }}/"
+                  method="post"
+                  id="contactForm"
+                  novalidate="novalidate"
+                  >
+                  {% csrf_token %}
+                  <input type="hidden" name="pdate" value="{{ now_date }}">
+                  <div class="star-rating">
+                    <fieldset class="ml-2">
+                      <input type="radio" id="star5" name="rating" value="5"><label for="star5"class="full" title="Awesome!"></label>
+                      <input type="radio" id="star4.5" name="rating" value="4.5"><label for="star4.5" class="half"></label>
+                      <input type="radio" id="star4" name="rating" value="4"><label for="star4" class="full"></label>
+                      <input type="radio" id="star3.5" name="rating" value="3.5"><label for="star3.5"class="half"></label>
+                      <input type="radio" id="star3" name="rating" value="3"><label for="star3" class="full"></label>
+                      <input type="radio" id="star2.5" name="rating" value="2.5"><label for="star2.5"class="half"></label>
+                      <input type="radio" id="star2" name="rating" value="2"><label for="star2" class="full"></label>
+                      <input type="radio" id="star1.5" name="rating" value="1.5"><label for="star1.5" class="half"></label>
+                      <input type="radio" id="star1" name="rating" value="1"><label for="star1" class="full"></label>
+                    </fieldset>
+                  </div>
+                  <div class="rating-txt" style="position: absolute; left:0; top: 30%; display: flex; flex-direction: column;">
+                    <div class="mt-3" style="display: block; width: 100%;">
+                      <div id="rating-value"></div>
+                    </div>
+                    <div style="display: block; width: 100%;">
+                      <p id="ratingDescription"></p>
+                    </div> 
+                  </div>
+                    <div class="col-md-12 mt-5">
+                      <div class="form-group">
+                        <textarea
+                          class="form-control"
+                          name="comment"
+                          id="comment"
+                          rows="1"
+                          placeholder="Review"
+                          style="height: 120px;"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div class="col-md-12 text-right">
+                      <button
+                        type="submit"
+                        value="submit"
+                        class="btn submit_btn"
+                      >
+                        Submit Now
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      document.querySelectorAll('.carousel-indicators li').forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            const carousel = document.querySelector('#carouselExampleIndicators');
+            const carouselInstance = new bootstrap.Carousel(carousel);
+            carouselInstance.to(index);
+
+            const item = carousel.querySelectorAll('.carousel-item')[index];
+            const video = item.querySelector('video');
+            if (video) {
+                video.play();
+            }
+        });
+      });
+      const carousel = document.querySelector('#carouselExampleIndicators');
+      const carouselInstance = new bootstrap.Carousel(carousel);
+          
+      // Pause carousel on hover or click
+      carousel.addEventListener('mouseenter', () => {
+          carouselInstance.pause();
+      });
+      
+      // Resume carousel when mouse leaves
+      carousel.addEventListener('mouseleave', () => {
+          carouselInstance.cycle();
+      });
+      
+      // Pause carousel on click (optional)
+      carousel.addEventListener('click', () => {
+          carouselInstance.pause();
+      });
+
+	    function scrollPreview(offset) {
+	    	const previewWrapper = document.querySelector('.preview-wrapper');
+	    	previewWrapper.scrollBy({ left: offset, behavior: 'smooth' });
+	    }
+
+    </script>
+    <!--================End Product Description Area =================-->
+  {% endblock %}
+  </body>
+</html>
