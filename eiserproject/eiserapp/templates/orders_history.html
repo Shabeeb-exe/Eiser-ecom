@@ -1,0 +1,116 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    {% load indian_numbers_tags %}
+    {% load custom_filters %}
+    <title>{% block title %}Orders - Eiser ecommerce{% endblock %}</title>
+  </head>
+
+  <body>
+    {%block body%}
+    <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div class="banner_content d-md-flex justify-content-between align-items-center">
+            <div class="mb-3 mb-md-0">
+              <h2>Orders</h2>
+              <p>Review your recent orders. Click on an order to view details.</p>
+            </div>
+            <div class="page_link">
+              <a href="/index/">Home</a>
+              <a href="/orders_history/">Orders</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+    <!--================Wishlist Area =================-->
+    <section class="cart_area">
+      <div class="container">
+        <div class="cart_inner">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Sl No.</th>
+                  <th scope="col">Products</th>
+                  <th scope="col">Total</th>
+                  <th scope="col">Order Date</th>
+                  <th scope="col">Payment Method</th>
+                  <th scope="col">Payment Status</th>
+                  <th scope="col">Delivery Status</th>
+                  <th scope="col">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                <tr>
+                  <td onclick="window.location.href = '/order_details/{{order.checkout.id}}/';">{{ forloop.counter }}</td>
+                  <td onclick="window.location.href = '/order_details/{{order.checkout.id}}/';">
+                    <div style="position: relative; display: inline-block; width: 120px;">
+                      {% with order.checkout.order_items.all as items %}
+                        {% if items|length > 0 %}      
+                          <img
+                            src="{{ items.0.product.thumbnail.url }}"
+                            alt="{{ items.0.product.name }}"
+                            style="width: 90px; object-fit: cover;"
+                          />
+                        {% endif %}
+                        {% if items|length > 1 %}
+                          <span
+                            style="
+                              position: absolute;
+                              bottom: -10px;
+                              right: -10px;
+                              background-color: #333;
+                              color: #fff;
+                              padding: 2px 6px;
+                              border-radius: 12px;
+                              font-size: 12px;
+                              cursor: pointer;
+                            "
+                          >
+                            +{{ items|length|add:"-1" }} more
+                          </span>
+                        {% endif %}
+                      {% endwith %}   
+                    </div>
+                  </td>
+                  <td onclick="window.location.href = '/order_details/{{order.checkout.id}}/';">₹{{ order.checkout.total|floatcomma_indian|remove_decimal_if_zero }}/-</td>
+                  <td onclick="window.location.href = '/order_details/{{order.checkout.id}}/';">{{ order.checkout.date|date:"d M Y, H:i A" }}</td>
+                  <td onclick="window.location.href = '/order_details/{{order.checkout.id}}/';">{{ order.payment_method }}</td>                          
+                  <td onclick="window.location.href = '/order_details/{{order.checkout.id}}/';">{{ order.checkout.payment_status }}</td>                          
+                  <td onclick="window.location.href = '/order_details/{{order.checkout.id}}/';">{{ order.checkout.delivery_status }}</td> 
+                  <td>
+                    {% if order.checkout.delivery_status == 'Cancelled' %}
+                      <span class="text-danger">Order Cancelled</span>
+                    {% elif order.checkout.delivery_status == 'Delivered' %}
+                      <span class="text-success">Order Delivered</span><br>
+                      <a class="btn btn-primary mt-2" href="/tracking/{{ order.checkout.id }}/">Track Order</a>
+                    {% else %}
+                      <a class="btn btn-danger mb-2" href="/cancel_order/{{ order.checkout.id }}/">Cancel Order</a><br>
+                      <a class="btn btn-primary" href="/tracking/{{ order.checkout.id }}/">Track Order</a>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="8">
+                    <p>Your order history is empty.</p>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>               
+    <!--================End Wishlist Area =================-->
+    {% endblock %}
+   </body> 
+</html>
