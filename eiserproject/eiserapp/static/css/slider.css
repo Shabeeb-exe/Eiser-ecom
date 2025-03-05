@@ -1,0 +1,105 @@
+.slider{
+    width: 100%;
+    margin-top: 100vh;
+    max-height: 400px;
+    overflow: hidden;
+    margin: 0;
+    position: relative;
+}
+.slider img{
+    object-fit: cover;
+}
+.slick-prev,
+.slick-next {
+    background: none !important;
+    color: #ffffff !important; 
+    z-index: 100 !important;
+    padding: 15px !important;
+    position: absolute !important;
+    top: 40% !important;
+    transform: translateY(-50%) !important;
+    padding: 0 !important;
+    cursor: pointer !important;
+    border: none !important;
+}
+.slick-prev {
+    left: 20px !important;
+}
+.slick-next {
+    right: 20px !important;
+}
+.slick-prev:hover, 
+.slick-next:hover {
+    color: #000 !important; 
+}
+.slick-prev:before, .slick-next:before { 
+    font-family: "slick" !important; 
+    font-size: 80px !important; 
+    line-height: 1 !important; 
+    color: rgb(148, 148, 148) !important; 
+    opacity: 0.75 !important; 
+    -webkit-font-smoothing: antialiased !important; 
+    -moz-osx-font-smoothing: grayscale !important; 
+}
+.slick-prev:before { 
+    content: "‹" !important; 
+}
+
+.slick-next:before { 
+    content: "›" !important; 
+}
+/* Ensure product cards retain their default appearance */
+.product-carousel .slick-slide {
+    padding: 0 15px; /* Adjust spacing between products */
+}
+
+.product-carousel .slick-slide > div {
+    display: flex;
+    justify-content: center;
+}
+
+.product-carousel .slick-slide .single-product {
+    width: 100%; /* Ensure product cards take full width */
+    margin: 0 auto; /* Center the product cards */
+}
+
+/* Adjust carousel arrows */
+.product-carousel .slick-prev,
+.product-carousel .slick-next {
+    background: none !important;
+    color: #000 !important;
+    z-index: 100 !important;
+    padding: 15px !important;
+    position: absolute !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    cursor: pointer !important;
+    border: none !important;
+}
+
+.product-carousel .slick-prev {
+    left: -25px !important;
+}
+
+.product-carousel .slick-next {
+    right: -25px !important;
+}
+
+.product-carousel .slick-prev:before,
+.product-carousel .slick-next:before {
+    font-family: "slick" !important;
+    font-size: 40px !important;
+    line-height: 1 !important;
+    color: #000 !important;
+    opacity: 0.75 !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+}
+
+.product-carousel .slick-prev:before {
+    content: "‹" !important;
+}
+
+.product-carousel .slick-next:before {
+    content: "›" !important;
+}
