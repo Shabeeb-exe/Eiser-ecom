@@ -1,0 +1,300 @@
+{% extends 'index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% load static %}
+    {% load indian_numbers_tags %}
+    {% load custom_filters %}
+    <title>{% block title %}Cart - Eiser ecommerce{% endblock %}</title>
+  </head>
+
+  <body>
+    {%block body%}
+
+    <!--================Home Banner Area =================-->
+    <section class="banner_area">
+      <div class="banner_inner d-flex align-items-center">
+        <div class="container">
+          <div
+            class="banner_content d-md-flex justify-content-between align-items-center"
+          >
+            <div class="mb-3 mb-md-0">
+              <h2>Cart</h2>
+              <p>Review items or proceed to checkout</p>
+            </div>
+            <div class="page_link">
+              <a href="/index/">Home</a>
+              <a href="/cart/">Cart</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Home Banner Area =================-->
+
+    <!--================Cart Area =================-->
+    <section class="cart_area">
+      <div class="container">
+        <div class="cart_inner">
+          <div class="table-responsive" style="overflow-x: hidden;">
+            <form action="/cart_post/" method="POST">
+              {% csrf_token %}
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col" colspan="2">Quantity</th>
+                    <th scope="col">Total</th>
+                    <th scope="col" colspan="2">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for item in cart %}
+                  <tr>
+                    <input type="hidden" name="cart_id" id="cart_id" value="{{item.id}}">
+
+                    <td>
+                      <div class="media">
+                        <div class="d-flex mr-3" style="width: 100px;">
+                          <img
+                            src="{{ item.product.thumbnail.url }}"
+                            alt="{{ item.product.name }}"
+                            style="width: 100px; object-fit: cover;"
+                          />
+                        </div>
+                        <div class="media-body">
+                          <p>{{ item.product.name }}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      {% if item.offer_amount and item.coupon_amount %}
+                        <h5>₹{{ item.coupon_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                        <del>₹{{ item.offer_amount|floatcomma_indian|remove_decimal_if_zero }}</del>
+                      {% elif item.coupon_amount %}
+                        <h5>₹{{ item.coupon_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                        <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                      {% elif item.offer_amount %}
+                        <h5>₹{{ item.offer_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                        <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                      {% else %}
+                        <h5>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                      {% endif %}
+                    </td>                  
+                    <td>
+                      <div class="product_count">
+                        <input
+                          type="text"
+                          name="qty"
+                          id="sst-{{ item.id }}"
+                          maxlength="12"
+                          min="1"
+                          value="{{ item.quantity }}"
+                          title="Quantity:"
+                          class="input-text qty"
+                        />
+                        <!-- <button
+                          onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst )) result.value++;return false;"
+                          class="increase items-count"
+                          type="button"
+                        >
+                          <i class="lnr lnr-chevron-up"></i>
+                        </button>                      
+                        <button
+                          onclick="var result = document.getElementById('sst'); var sst = result.value; if( !isNaN( sst ) &amp;&amp; sst > 0 ) result.value--;return false;"
+                          class="reduced items-count"
+                          type="button"
+                        >
+                          <i class="lnr lnr-chevron-down"></i>
+                        </button> -->
+                        <button
+                          onclick="increaseQuantity({{ item.id }}); return false;"
+                          class="increase items-count"
+                          type="button"
+                        >
+                          <i class="lnr lnr-chevron-up"></i>
+                        </button>                      
+                      
+                        <button
+                          onclick="decreaseQuantity({{ item.id }}); return false;"
+                          class="reduced items-count"
+                          type="button"
+                        >
+                          <i class="lnr lnr-chevron-down"></i>
+                        </button>                          
+                      </div>
+                      <td>
+                        <a href="#" onclick="updateQuantity({{ item.id }}); return false;" title="Update quantity">
+                          <i class="lnr lnr-sync" style="font-size: 20px;"></i>
+                        </a>
+                      </td>
+                    </td> 
+                    <script>
+                      // Function to increase quantity
+                      function increaseQuantity(itemId) {
+                        var result = document.getElementById('sst-'+ itemId);
+                        var sst = result.value;
+                        if (!isNaN(sst)) {
+                          result.value = parseInt(sst) + 1;
+                        }
+                      }
+                    
+                      // Function to decrease quantity
+                      function decreaseQuantity(itemId) {
+                        var result = document.getElementById('sst-'+ itemId);
+                        var sst = result.value;
+                        if (!isNaN(sst) && sst > 0) {
+                          result.value = parseInt(sst) - 1;
+                        }
+                      }
+                    
+                      // Function to update quantity without using a form (AJAX)
+                      function updateQuantity(itemId) {
+                        var quantity = document.getElementById('sst-'+ itemId).value;
+                        var itemId = '{{ item.id }}';  // Assuming item.id is dynamically set
+                    
+                        // Send AJAX request to update the quantity
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", "/update_quantity/" + itemId + "/", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");  // CSRF Token for security
+                        xhr.onload = function() {
+                          if (xhr.status === 200) {
+                            alert("Quantity updated successfully!");
+                            window.location.href = "/cart/";  // Redirect to the cart page after update
+                          } else {
+                            alert("Failed to update quantity.");
+                          }
+                        };
+                        xhr.send("qty=" + quantity);  // Sending the updated quantity to the server
+                      }
+                    </script>                 
+                    <td>
+                      <h5>₹{{ item.final_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                    </td>
+                    <td colspan="2"><a href="/remove_item/{{ item.id }}/" title="Remove item" onclick="return confirm('Are you sure you want to remove this item?');"><i class="fa fa-trash m-2" style="color: red; font-size: 30px;"></i></a></td>
+                  </tr>
+                  {% empty %}
+                  <tr>
+                    <td colspan="6">
+                      <p>Your cart is empty.</p>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  <tr class="bottom_button">
+                    <!-- <td></td>
+                    <td></td>
+                    <td></td> -->
+                    <td colspan="5" class="text-left">
+                      <div class="applied_coupons">
+                        <h6>Coupons Applied:</h6>
+                        <ul class="list-unstyled">                            
+                            {% for applied_coupon in applied_coupons %}
+                              <li>{{ applied_coupon.coupon.product.name }} - <strong>{{ applied_coupon.coupon.coupon }}</strong></li>
+                            {% empty %}
+                              <li>No coupons applied yet.</li>
+                            {% endfor %}
+                        </ul>
+                      </div>
+                    </td>
+                    <td colspan="5">
+                      <div class="cupon_text">
+                        <select id="product_select" name="product_id" class="mx-2">
+                          <option value="" selected disabled>Select an item</option>
+                          {% for item in cart %}
+                            <option value="{{ item.id }}">{{ item.product.name }}</option>
+                          {% endfor %}
+                        </select>
+                        <input type="text" class="text-dark" id="coupon_code" name="coupon" placeholder="Coupon Code"/>
+                        <a href="#" onclick="applyCoupon(); return false;" class="main_btn mx-2">Apply</a>
+                      </div>
+                    </td>
+                    
+                    <script>
+                      function applyCoupon() {
+                        var productId = document.getElementById('product_select').value;
+                        var couponCode = document.getElementById('coupon_code').value;
+                    
+                        if (!productId || !couponCode) {
+                          alert('Please select a product and enter a coupon code.');
+                          return;
+                        }
+                    
+                        // Prepare data to send to the server
+                        var data = new FormData();
+                        data.append('product_id', productId);
+                        data.append('coupon', couponCode);
+                    
+                        // Create AJAX request
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('POST', '/apply_coupon/', true);
+                        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');  // CSRF token for security
+                    
+                        // Handle response
+                        xhr.onload = function() {
+                          if (xhr.status === 200) {
+                            var response = JSON.parse(xhr.responseText);
+                            if (response.status === 'success') {
+                              alert(response.message); // Success message from server
+                              window.location.reload(); // Optionally reload to reflect changes
+                            } else {
+                              alert(response.message); // Error message from server
+                            }
+                          } else {
+                            alert('An error occurred. Please try again.');
+                          }
+                        };
+
+                          // Handle network errors
+                          xhr.onerror = function () {
+                            alert('Network error. Please check your connection.');
+                          };
+                    
+                        // Send AJAX request
+                        xhr.send(data);
+                      }
+                    </script>
+                  </tr>
+                  <tr>
+                    <td colspan="6">
+                      <h5>Subtotal :</h5>
+                    </td>
+                    <td>
+                      <input type="hidden" name="total" value="{{ total_price }}">
+                      <h5> ₹{{ total_price|floatcomma_indian|remove_decimal_if_zero }} </h5>
+                    </td>
+                  </tr>
+                  <!-- <tr class="shipping_area">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <div class="shipping_box">
+                        <h5 class="mb-3">Shipping</h5>
+                        <h6>Delivery Address:</h6>
+                        <textarea name="address" id="address" class="w-100" style="height: 100px;"></textarea>
+                      </div>
+                    </td>
+                  </tr> -->
+                  <tr class="out_button_area">
+                    <td colspan="6"></td>
+                    <td>
+                      <div class="checkout_btn_inner">
+                        <a class="gray_btn mx-2" href="/category/">Continue Shopping</a>
+                        <button type="submit" class="main_btn">Proceed to checkout</button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--================End Cart Area =================-->
+    {% endblock %}
+  </body>
+</html>
