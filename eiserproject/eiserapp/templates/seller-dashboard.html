@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  {% load indian_numbers_tags %}
+  {% load custom_filters %}
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png" />
+  <title>{% block title %}Seller-dashboard Eiser{% endblock %}</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/linericon/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/flaticon.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/owl-carousel/owl.carousel.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/lightbox/simpleLightbox.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" />
+  <link rel="stylesheet" href="{% static 'vendors/nice-select/css/nice-select.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/animate-css/animate.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.css' %}" />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+  <!-- main css -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/product.css' %}" />
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .card {
+      margin-bottom: 20px;
+    }
+    .card-body h3 {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <!--================Header Menu Area =================-->
+  <header class="header_area">
+    <div class="top_menu">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7">
+            <div class="float-left">
+              <p>Phone: +01 256 25 235</p>
+              <p>email: info@eiser.com</p>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="float-right">
+              <ul class="right_side">
+                <li>
+                  <a href="/contact_for_seller/">
+                    Contact Us
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="main_menu">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light w-100">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <a class="navbar-brand logo_h" href="/seller_dashboard/">
+            <img src="{% static 'img/logo.png' %}" alt="" />
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse offset w-100" id="navbarSupportedContent">
+            <div class="row w-100 mx-0">
+              <div class="col-lg-9 px-0">
+                <ul class="nav navbar-nav center_nav pull-right">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/seller_dashboard/">Dashboard</a>
+                  </li>
+                  <!-- <li class="nav-item">
+                    <a class="nav-link" href="/#(view&edit-products)/">Products</a>
+                  </li> -->
+                  <li class="nav-item submenu dropdown">
+                    <a href="/view_products/" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                      aria-expanded="false">Products</a>
+                    <ul class="dropdown-menu">
+                      <li class="nav-item">
+                        <a class="nav-link" href="/add_product/">Add product</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/view_products/">View products</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <!-- <li class="nav-item">
+                    <a class="nav-link" href="/#/">Orders</a>
+                  </li> -->
+                  <li class="nav-item submenu dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                      aria-expanded="false">Orders</a>
+                    <ul class="dropdown-menu">
+                      <li class="nav-item">
+                        <a class="nav-link" href="/view_orders/">View Orders</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/view_returns/">Returns</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/view_complaints/">Complaints</a>
+                  </li>
+                  <li class="nav-item submenu dropdown">
+                    <a href="/view_offers/" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                      aria-expanded="false">Offers</a>
+                    <ul class="dropdown-menu">
+                      <li class="nav-item">
+                        <a class="nav-link" href="/add_offer/">Add Offer</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/view_offers/">View Offers</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/inventory/">Inventory</a>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="col-lg-3 pr-0">
+                <ul class="nav navbar-nav navbar-right right_nav pull-right">
+                  <li class="nav-item">
+                    <a href="/seller_profile/" class="icons">
+                      <i class="ti-user" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/login/" class="icons">
+                      <i class="ti-power-off" aria-hidden="true" style="color: red;"></i>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/contact_for_seller/" class="icons">
+                      <i class="ti-headphone-alt" aria-hidden="true"></i>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <!--================Header Menu Area =================-->
+  {% block body %}
+  <div class="container my-5">
+    <!-- Sales Overview -->
+    <div class="row">
+      <div class="col-md-3">
+        <div class="card text-white bg-primary">
+          <div class="card-body">
+            <h5>Total Sales</h5>
+            <h3>₹{{ total_sales }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-success">
+          <div class="card-body">
+            <h5>Completed Orders</h5>
+            <h3>{{ completed_orders }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-white bg-warning">
+          <div class="card-body">
+            <h5>Pending Orders</h5>
+            <h3>{{ pending_orders }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3" onclick="window.location.href = '/inventory/';">
+        <div class="card text-white bg-danger">
+          <div class="card-body">
+            <h5>Low Stock</h5>
+            <h3>{{ low_stock_products }} Products</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Orders Table -->
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h5>Recent Orders</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in recent_orders %}
+                <tr>
+                  <td>#{{ order.checkout.id }}</td>
+                  <td>{{ order.checkout.user.name }}</td>
+                  <td>
+                    <span class="badge badge-{% if order.checkout.delivery_status == 'Delivered' %}success{% else %}warning{% endif %}">
+                      {{ order.checkout.delivery_status }}
+                    </span>
+                  </td>
+                  <td>₹{{ order.price }}</td>
+                  <td>{{ order.checkout.date|date:"Y-m-d" }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sales Chart -->
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <h5>Sales Trends</h5>
+          </div>
+          <div class="card-body">
+            <canvas id="salesChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript for Chart -->
+    <script>
+      const ctx = document.getElementById('salesChart').getContext('2d');
+      const salesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: {{ sales_labels|safe }},  // Dynamic labels from the database
+          datasets: [{
+            label: 'Sales',
+            data: {{ sales_data|safe }},  // Dynamic data from the database
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+  </div>
+  {% endblock %}
+  
+  <!--================ start footer Area  =================-->
+  <footer class="footer-area section_gap">
+    <div class="container">
+      <img src="{% static 'img/logo-white.png' %}" style="width: 20%;" alt="Eiser-logo" />
+      <div class="footer-bottom row align-items-center">
+        <p class="footer-text m-0 col-lg-8 col-md-12"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+        <div class="col-lg-4 col-md-12 footer-social">
+          <a href="#"><i class="fa fa-facebook"></i></a>
+          <a href="#"><i class="fa fa-twitter"></i></a>
+          <a href="#"><i class="fa fa-dribbble"></i></a>
+          <a href="#"><i class="fa fa-behance"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--================ End footer Area  =================-->
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="{% static 'js/popper.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script>
+    // Sales Chart (Example using Chart.js)
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    const salesChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+        datasets: [{
+          label: 'Sales',
+          data: [12000, 19000, 3000, 5000, 2000, 3000, 45000],
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+  <script src="{% static 'js/stellar.js' %}"></script>
+  <script src="{% static 'vendors/lightbox/simpleLightbox.min.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>   <!-- Lightbox2 JS -->
+  <script src="{% static 'vendors/nice-select/js/jquery.nice-select.min.js '%}"></script>
+  <script src="{% static 'vendors/isotope/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendors/isotope/isotope-min.js' %}"></script>
+  <script src="{% static 'vendors/owl-carousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+  <script src="{% static 'vendors/counter-up/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'vendors/counter-up/jquery.counterup.js' %}"></script>
+  <script src="{% static 'js/mail-script.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+  <script src="{% static 'js/contact.js' %}"></script>
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/validate.js' %}"></script>
+  <script src="{% static 'js/file-handler.js' %}"></script>
+  <!-- DataTables JS -->
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+  <script>
+    $(document).ready(function() {
+      console.log("Initializing DataTables..."); // Debugging
+      var table = $('.table').DataTable({
+        "paging": true, // Enable pagination
+        "pageLength": 5, // Set default rows per page
+        "lengthMenu": [5, 10, 25, 50, 100], // Rows per page options
+        "searching": true, // Enable search functionality
+        "ordering": true, // Enable column sorting
+        "info": true, // Show table information
+        "autoWidth": false, // Disable automatic column width calculation
+        "responsive": true, // Enable responsive design
+      });
+  
+      console.log("DataTables initialized successfully!"); // Debugging
+    });
+  </script>
+</body>
+</html> 
