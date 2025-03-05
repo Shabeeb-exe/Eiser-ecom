@@ -1,0 +1,172 @@
+{% extends 'seller-dashboard.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  <title>{%block title%}Seller Profile - Eiser ecommerce{%endblock%}</title>
+</head>
+
+<body>
+  {%block body%}
+  <!--================Home Banner Area =================-->
+  <section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+      <div class="container">
+        <div class="banner_content d-md-flex justify-content-between align-items-center">
+          <div class="mb-3 mb-md-0">
+            <h2>Profile</h2>
+            <p>Edit your profile details.</p>
+          </div>
+          <div class="page_link">
+            <a href="/seller_dashboard/">Dashboard</a>
+            <a href="/seller_profile/">Profile</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================End Home Banner Area =================-->
+  <!-- Profile Section -->
+    <section class="profile_area mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <!-- Profile Image -->
+                    <div class="profile_image">
+                        <input type="hidden" name="id" id="name" value="{{profile.id}}">
+                        {%if profile.photo%}
+                            <img src="{{profile.photo.url}}" alt="Profile Image" id="profile-img" name="photo" class="rounded-circle" style="width: 300px;">
+                        {% else %}
+                            <img src="{% static 'img/default-profile.png' %}" alt="Default Profile Image" id="profile-img" class="rounded-circle" style="width: 300px;">
+                        {%endif%}
+                        <div class="edit-photo">
+                        <button class="btn btn-primary" id="change-photo-btn">
+                            <i class="ti-pencil-alt"></i> Edit Photo
+                        </button>
+                        <input type="file" id="profile-img-edit" class="d-none" name="photo"/>
+                        <button class="btn btn-danger" id="delete-photo-btn" style="display:none;">
+                            <i class="ti-trash"></i> Delete Photo
+                        </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                <!-- Profile Details Form -->
+                <div class="profile_details">
+                    <form action="/seller_profile_edit/{{profile.id}}/" method="POST" id="profile-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{profile.name}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="place">Place</label>
+                        <input type="text" class="form-control" id="place" name="place" value="{{profile.place}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="tel" class="form-control" id="pincode" name="pincode" value="{{profile.pincode|escape}}" inputmode="numeric" pattern="\d*">
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State/Union Territory</label><br>
+                        <select name="state" id="state" class="form-control mb-3"> 
+                            <option value="" selected disabled>Select your state</option>
+                            <option value="Andhra Pradesh" {% if profile.state == 'Andhra Pradesh' %}selected{% endif %}>Andhra Pradesh</option>
+                            <option value="Arunachal Pradesh" {% if profile.state == 'Arunachal Pradesh' %}selected{% endif %}>Arunachal Pradesh</option>
+                            <option value="Assam" {% if profile.state == 'Assam' %}selected{% endif %}>Assam</option>
+                            <option value="Bihar" {% if profile.state == 'Bihar' %}selected{% endif %}>Bihar</option>
+                            <option value="Chhattisgarh" {% if profile.state == 'Chhattisgarh' %}selected{% endif %}>Chhattisgarh</option>
+                            <option value="Goa" {% if profile.state == 'Goa' %}selected{% endif %}>Goa</option>
+                            <option value="Gujarat" {% if profile.state == 'Gujarat' %}selected{% endif %}>Gujarat</option>
+                            <option value="Haryana" {% if profile.state == 'Haryana' %}selected{% endif %}>Haryana</option>
+                            <option value="Himachal Pradesh" {% if profile.state == 'Himachal Pradesh' %}selected{% endif %}>Himachal Pradesh</option>
+                            <option value="Jharkhand" {% if profile.state == 'Jharkhand' %}selected{% endif %}>Jharkhand</option>
+                            <option value="Karnataka" {% if profile.state == 'Karnataka' %}selected{% endif %}>Karnataka</option>
+                            <option value="Kerala" {% if profile.state == 'Kerala' %}selected{% endif %}>Kerala</option>
+                            <option value="Madhya Pradesh" {% if profile.state == 'Madhya Pradesh' %}selected{% endif %}>Madhya Pradesh</option>
+                            <option value="Maharashtra" {% if profile.state == 'Maharashtra' %}selected{% endif %}>Maharashtra</option>
+                            <option value="Manipur" {% if profile.state == 'Manipur' %}selected{% endif %}>Manipur</option>
+                            <option value="Meghalaya" {% if profile.state == 'Meghalaya' %}selected{% endif %}>Meghalaya</option>
+                            <option value="Mizoram" {% if profile.state == 'Mizoram' %}selected{% endif %}>Mizoram</option>
+                            <option value="Nagaland" {% if profile.state == 'Nagaland' %}selected{% endif %}>Nagaland</option>
+                            <option value="Odisha" {% if profile.state == 'Odisha' %}selected{% endif %}>Odisha</option>
+                            <option value="Punjab" {% if profile.state == 'Punjab' %}selected{% endif %}>Punjab</option>
+                            <option value="Rajasthan" {% if profile.state == 'Rajasthan' %}selected{% endif %}>Rajasthan</option>
+                            <option value="Sikkim" {% if profile.state == 'Sikkim' %}selected{% endif %}>Sikkim</option>
+                            <option value="Tamil Nadu" {% if profile.state == 'Tamil Nadu' %}selected{% endif %}>Tamil Nadu</option>
+                            <option value="Telangana" {% if profile.state == 'Telangana' %}selected{% endif %}>Telangana</option>
+                            <option value="Tripura" {% if profile.state == 'Tripura' %}selected{% endif %}>Tripura</option>
+                            <option value="Uttarakhand" {% if profile.state == 'Uttarakhand' %}selected{% endif %}>Uttarakhand</option>
+                            <option value="Uttar Pradesh" {% if profile.state == 'Uttar Pradesh' %}selected{% endif %}>Uttar Pradesh</option>
+                            <option value="West Bengal" {% if profile.state == 'West Bengal' %}selected{% endif %}>West Bengal</option>
+                            <option value="Andaman and Nicobar Islands" {% if profile.state == 'Andaman and Nicobar Islands' %}selected{% endif %}>Andaman and Nicobar Islands</option>
+                            <option value="Chandigarh" {% if profile.state == 'Chandigarh' %}selected{% endif %}>Chandigarh</option>
+                            <option value="Dadra and Nagar Haveli and Daman and Diu" {% if profile.state == 'Dadra and Nagar Haveli and Daman and Diu' %}selected{% endif %}>Dadra and Nagar Haveli and Daman and Diu</option>
+                            <option value="Lakshadweep" {% if profile.state == 'Lakshadweep' %}selected{% endif %}>Lakshadweep</option>
+                            <option value="Delhi" {% if profile.state == 'Delhi' %}selected{% endif %}>Delhi</option>
+                            <option value="Puducherry" {% if profile.state == 'Puducherry' %}selected{% endif %}>Puducherry</option>
+                            <option value="Ladakh" {% if profile.state == 'Ladakh' %}selected{% endif %}>Ladakh</option>
+                            <option value="Jammu and Kashmir" {% if profile.state == 'Jammu and Kashmir' %}selected{% endif %}>Jammu and Kashmir</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select name="gender" id="gender" class="form-control mb-3">
+                            <option value="" selected disabled>Select your gender</option>
+                            <option value="male" {% if profile.gender == 'male' %}selected{% endif %}>Male</option>
+                            <option value="female" {% if profile.gender == 'female' %}selected{% endif %}>Female</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success mb-4">Save Changes</button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#changePasswordModal" style="position: absolute; right: 0; margin-right: 15px;">Change password</button>
+                    </form>
+                </div>
+                <!-- Modal for Change Password -->
+                <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                              <form action="/seller_change_password_post/" method="POST" onsubmit="return validatePasswords()">
+                                  {% csrf_token %}
+                                  <div class="form-group" style="position: relative;">
+                                      <label for="current-password">Current Password</label>
+                                      <input type="password" class="form-control" id="current-password" name="current_password" required>
+                                      <span class="fa fa-eye" id="togglePassword0" 
+                                          style="position: absolute; top: 75%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                                      </span>
+                                  </div>
+                                  <div class="form-group" style="position: relative;">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" id="password" name="password" style="padding-right: 2.5rem;">
+                                    <span class="fa fa-eye" id="togglePassword1" 
+                                        style="position: absolute; top: 75%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                                    </span>
+                                  </div>
+                                  <div class="form-group" style="position: relative;">
+                                      <label for="confirm-password">Confirm Password</label>
+                                      <input type="password" class="form-control" id="confirm-password" name="confirm_password" style="padding-right: 2.5rem;">
+                                      <span class="fa fa-eye" id="togglePassword2"
+                                          style="position: absolute; top: 75%; right: 10px; transform: translateY(-50%); cursor: pointer;">
+                                      </span>
+                                  </div>
+                                  <button type="submit" class="btn btn-success">Save Changes</button>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!--================ End Profile Area =================-->
+</body>
+{%endblock%}
+</html> 
