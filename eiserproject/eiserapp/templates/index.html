@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  {% load indian_numbers_tags %}
+  {% load custom_filters %}
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" href="{% static 'img/favicon.png' %}" type="image/png" />
+  <title>{% block title %}Eiser Ecommerce{% endblock %}</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/linericon/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/themify-icons.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/flaticon.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/owl-carousel/owl.carousel.min.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/lightbox/simpleLightbox.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/nice-select/css/nice-select.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/animate-css/animate.css' %}" />
+  <link rel="stylesheet" href="{% static 'vendors/jquery-ui/jquery-ui.css' %}" />
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+  <!-- main css -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/slider.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/tracking.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/search.css' %}" />
+  <!--Slick Stylesheets-->
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <style>
+    .slick-dots {
+      position: absolute;
+      bottom: 0 !important;
+      padding: 50px;
+      display: block;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      text-align: center;
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+</head>
+
+<body>
+  <!--================Header Menu Area =================-->
+  <header class="header_area">
+    <div class="top_menu">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-7">
+            <div class="float-left">
+              <p>Phone: +01 256 25 235</p>
+              <p>email: info@eiser.com</p>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="float-right">
+              <ul class="right_side">
+                <!-- <li>
+                  <a href="#">
+                    gift card
+                  </a>
+                </li> -->
+                <!-- <li>
+                  <a href="/tracking/">
+                    track order
+                  </a>
+                </li> -->
+                <li>
+                  <a href="/contact/">
+                    Contact Us
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="main_menu">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light w-100">
+          <!-- Brand and toggle get grouped for better mobile display -->
+          <a class="navbar-brand logo_h" href="/index/">
+            <img src="{% static 'img/logo.png' %}" alt="" />
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!-- Collect the nav links, forms, and other content for toggling -->
+          <div class="collapse navbar-collapse offset w-100" id="navbarSupportedContent">
+            <div class="row w-100 mr-1">
+              <div class="col-lg-10 pr-0">
+                  <ul class="nav navbar-nav center_nav pull-right">
+                      <li class="nav-item">
+                          <a class="nav-link" href="/index/">Home</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/shop/">Shop</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="/orders_history/">Orders</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/contact/">Contact</a>
+                      </li>
+                      <div id="search-bar" class="search-bar mt-3">
+                        <input type="text" id="search-input" placeholder="Search by product name, category, brand, etc." autocomplete="off">
+                        <a href="#" class="icons" id="search-icon">
+                            <i class="ti-search" aria-hidden="true"></i>
+                        </a>
+                        {% if search_history %}
+                        <div id="search-history">
+                            <p class="ml-3 mt-3 text-muted">Recent Searches <span id="clear-all" style="cursor:pointer; color:red; float:right;" class="mr-3">Clear All</span></p>
+                            <ul id="search-history-list">
+                                {% for history in search_history %}
+                                <li class="history-item" data-query="{{ history.query }}">
+                                    <span class="history-query"><i class="ti-time mr-2 text-muted" aria-hidden="true"></i>{{ history.query }}</span>
+                                    <span class="delete-search" data-history-id="{{ history.id }}" style="cursor:pointer; float:right;">&times;</span>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        <div id="search-suggestions"></div>
+                      </div>
+                  </ul>
+              </div>
+          
+              <div class="col-lg-2 pr-0">
+                <ul class="nav navbar-nav navbar-right right_nav pull-right">
+
+                    <li class="nav-item">
+                        <a href="/cart/" class="icons">
+                            <i class="ti-shopping-cart"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/profile/" class="icons">
+                            <i class="ti-user" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/wishlist/" class="icons">
+                            <i class="ti-heart" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/login/" class="icons">
+                            <i class="ti-power-off" aria-hidden="true" style="color: red;"></i>
+                        </a>
+                    </li>
+                </ul>
+              </div>
+            </div>        
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <!--================Header Menu Area =================-->
+
+  <!--================Home Banner Area =================-->
+  {%block body%}
+  <section class="banner_area mb-40">
+    <div class="slider" style="width: 60%; margin: 0 auto;">
+        <img src="{% static 'img/banner/sliderimg-1.png' %}" onclick="window.location.href = '/single_product/1/'">
+        <img src="{% static 'img/banner/sliderimg-2.jpg' %}" onclick="window.location.href = '/single_product/3/'">
+        <img src="{% static 'img/banner/sliderimg-3.jpg' %}" onclick="window.location.href = '/single_product/5/'">
+        <img src="{% static 'img/banner/sliderimg-4.jpg' %}" onclick="window.location.href = '/single_product/4/'">
+    </div> 
+  </section>
+  <!--================End Home Banner Area =================-->
+  <!--================ Shop by Category Area =================-->
+  <section class="inspired_product_area">
+    <div class="container">
+      <!-- <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="main_title">
+            <h2><span>Shop By Category</span></h2>
+            <p>Shop by Category, Tailored to Your Needs.</p>
+          </div>
+        </div>
+      </div> -->
+      <div class="product_top_bar d-flex justify-content-between align-items-center mb-3">
+        <div class="left_dorp ">
+          <h3>Browse Categories</h3>
+        </div>
+      </div>
+      <div class="row">
+        {% if categories|length > 4 %}
+          <div class="product-carousel">
+            {% for category in categories %}
+            <div class="col-lg-3 col-md-6">
+              <div class="single-product">
+                <div class="product-img">
+                  <img class="img-fluid w-100" src="{{ category.thumbnail.url }}" alt="{{ category.name }}" />
+                </div>
+                <div class="product-btm" onclick="window.location.href = '/category/{{category.id}}/';">
+                  <a href="/category/{{category.id}}/" class="d-block">
+                    <h4>{{ category.name }}</h4>
+                  </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          {% for category in categories %}
+            <div class="col-lg-3 col-md-6">
+              <div class="single-product">
+                <div class="product-img">
+                  <img class="img-fluid w-100" src="{{ category.thumbnail.url }}" alt="{{ category.name }}" />
+                </div>
+                <div class="product-btm" onclick="window.location.href = '/category/{{category.id}}/';">
+                  <a href="/category/{{category.id}}/" class="d-block">
+                    <h4>{{ category.name }}</h4>
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}      
+        {% endif %}
+    </div>
+  </section>
+  <!--================ End Shop by Category Area =================-->
+  
+  <!--================ Shop by SubCategory Area =================-->
+  <section class="inspired_product_area">
+    <div class="container">
+      <!-- <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="main_title">
+            <h2><span>Shop By Sub Category</span></h2>
+            <p>Shop by Sub Category, Tailored to Your Needs.</p>
+          </div>
+        </div>
+      </div> -->
+      <div class="product_top_bar d-flex justify-content-between align-items-center mb-3">
+        <div class="left_dorp ">
+          <h3>Browse Subcategories</h3>
+        </div>
+      </div>
+
+      <div class="row">
+        {% if subcategories|length > 4 %}
+          <div class="product-carousel">
+              {% for subcategory in subcategories %}
+              <div class="col-lg-3 col-md-6">
+                <div class="single-product">
+                  <div class="product-img">
+                    <img class="img-fluid w-100" src="{{ subcategory.thumbnail.url }}" alt="{{ subcategory.name }}" />
+                  </div>
+                  <div class="product-btm" onclick="window.location.href = '/category/{{category.id}}/';">
+                    <a href="/subcategory/{{subcategory.id}}/" class="d-block">
+                      <h4>{{ subcategory.name }}</h4>
+                    </a>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          {% for subcategory in subcategories %}
+          <div class="col-lg-3 col-md-6">
+            <div class="single-product">
+              <div class="product-img">
+                <img class="img-fluid w-100" src="{{ subcategory.thumbnail.url }}" alt="{{ subcategory.name }}" />
+              </div>
+              <div class="product-btm" onclick="window.location.href = '/category/{{category.id}}/';">
+                <a href="/subcategory/{{subcategory.id}}/" class="d-block">
+                  <h4>{{ subcategory.name }}</h4>
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}        
+        {% endif %}     
+    </div>
+  </section>
+  <!--================ End Shop by SubCategory Area =================-->
+
+
+  {% if wishlist %}
+  <!--================ Inspired Product Area (WISHLIST) =================-->
+  <section class="inspired_product_area">
+    <div class="container">
+      <!-- <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="main_title">
+            <h2><span>Wishlisted products</span></h2>
+            <p>Your future favorites, just a click away.</p>
+          </div>
+        </div>
+      </div> -->
+      <div class="product_top_bar d-flex justify-content-between align-items-center mb-3">
+        <div class="left_dorp ">
+          <h3>Wishlisted Items</h3>
+        </div>
+        <a href="/wishlist/" class="btn btn-success btn-sm">View All</a>
+      </div>
+
+      <div class="row">
+        {% if wishlist|length > 4 %}
+          <div class="product-carousel">
+            {% for item in wishlist %}
+            <div class="col-lg-3 col-md-6">
+              <div class="single-product">
+                <div class="product-img">
+                  <img class="img-fluid w-100" src="{{ item.product.thumbnail.url }}" alt="{{ item.product.name }}" />
+                  <div class="p_icon">
+                    <a href="/single_product/{{ item.product.id }}/">
+                      <i class="ti-eye"></i>
+                    </a>
+                    <a href="/remove_wishlist_item/{{ item.id }}/">
+                      <i class="fa fa-heart"></i>
+                    </a>
+                    <!-- <a href="/add_to_cart/">
+                      <input type="hidden" name="p_id" value="{{ product.id }}">
+                      <i class="ti-shopping-cart"></i>
+                    </a> -->
+                    <form action="/add_to_cart/" method="POST" style="display: inline;">
+                      {% csrf_token %}
+                      <input type="hidden" name="p_id" value="{{ item.product.id }}">
+                      <input type="hidden" name="qty" value="1"> <!-- Default quantity can be set here -->
+                      <button type="submit" style="all: unset;">
+                        <a href="">
+                          <i class="ti-shopping-cart"></i>
+                        </a>
+                      </button>
+                    </form>                
+                  </div>
+                </div>
+                <div class="product-btm" onclick="window.location.href = '/single_product/{{ item.product.id }}/';">
+                  <a href="/single_product/{{ item.product.id }}/" class="d-block">
+                    <h4>{{ item.product.name }}</h4>
+                  </a>
+                  <div class="mt-3" onclick="window.location.href = '/single_product/{{ item.product.id }}/';">
+                  {% if item.discounted_price %}
+                    <h5>₹{{ item.discounted_price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                    <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                  {% else %}
+                    <h5>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                  {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          {% for item in wishlist %}
+            <div class="col-lg-3 col-md-6">
+              <div class="single-product">
+                <div class="product-img">
+                  <img class="img-fluid w-100" src="{{ item.product.thumbnail.url }}" alt="{{ item.product.name }}" />
+                  <div class="p_icon">
+                    <a href="/single_product/{{ item.product.id }}/">
+                      <i class="ti-eye"></i>
+                    </a>
+                    <a href="/remove_wishlist_item/{{ item.id }}/">
+                      <i class="fa fa-heart"></i>
+                    </a>
+                    <!-- <a href="/add_to_cart/">
+                      <input type="hidden" name="p_id" value="{{ product.id }}">
+                      <i class="ti-shopping-cart"></i>
+                    </a> -->
+                    <form action="/add_to_cart/" method="POST" style="display: inline;">
+                      {% csrf_token %}
+                      <input type="hidden" name="p_id" value="{{ item.product.id }}">
+                      <input type="hidden" name="qty" value="1"> <!-- Default quantity can be set here -->
+                      <button type="submit" style="all: unset;">
+                        <a href="">
+                          <i class="ti-shopping-cart"></i>
+                        </a>
+                      </button>
+                    </form>                
+                  </div>
+                </div>
+                <div class="product-btm" onclick="window.location.href = '/single_product/{{ item.product.id }}/';">
+                  <a href="/single_product/{{ item.product.id }}/" class="d-block">
+                    <h4>{{ item.product.name }}</h4>
+                  </a>
+                  <div class="mt-3" onclick="window.location.href = '/single_product/{{ item.product.id }}/';">
+                  {% if item.discounted_price %}
+                    <h5>₹{{ item.discounted_price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                    <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                  {% else %}
+                    <h5>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                  {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        {% endif %}    
+      </div>
+    </div>
+  </section>
+  <!--================ End Inspired Product Area =================-->
+  {% endif %}
+
+  {% if cart %}
+  <!--================ Cart Waitlist Area =================-->
+  <section class="inspired_product_area">
+    <div class="container">
+      <!-- <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="main_title">
+            <h2><span>Items in Cart</span></h2>
+            <p>Almost yours… just one more step!</p>
+          </div>
+        </div>
+      </div> -->
+      <div class="product_top_bar d-flex justify-content-between align-items-center mb-3">
+        <div class="left_dorp ">
+          <h3>Items in cart</h3>
+        </div>
+        <a href="/cart/" class="btn btn-success btn-sm">View All</a>
+      </div>
+
+      <div class="row">
+        {% if cart|length > 4 %}
+          <div class="product-carousel">
+            {% for item in cart %}
+            <div class="col-lg-3 col-md-6">
+              <div class="single-product">
+                <div class="product-img">
+                  <img class="img-fluid w-100" src="{{ item.product.thumbnail.url }}" alt="{{ item.product.name }}" />
+                  <div class="p_icon">
+                    <a href="/single_product/{{ item.product.id }}/">
+                      <i class="ti-eye"></i>
+                    </a>
+                    <a href="/remove_wishlist_item/{{ item.id }}/">
+                      <i class="fa fa-heart"></i>
+                    </a>
+                    <a href="/remove_item/{{ item.id }}/" title="Remove item" onclick="return confirm('Are you sure you want to remove this item from cart?');">
+                      <i class="ti-close"></i>
+                    </a>       
+                  </div>
+                </div>
+                <div class="product-btm" onclick="window.location.href = '/single_product/{{ item.id }}/';">
+                  <a href="/single_product/{{ item.id }}/" class="d-block">
+                    <h4>{{ item.product.name }}</h4>
+                  </a>
+                  <div class="mt-3" onclick="window.location.href = '/single_product/{{ item.id }}/';">
+                    {% if item.offer_amount and item.coupon_amount %}
+                      <h5>₹{{ item.coupon_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                      <del>₹{{ item.offer_amount|floatcomma_indian|remove_decimal_if_zero }}</del>
+                    {% elif item.coupon_amount %}
+                      <h5>₹{{ item.coupon_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                      <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                    {% elif item.offer_amount %}
+                      <h5>₹{{ item.offer_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                      <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                    {% else %}
+                      <h5>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          {% for item in cart %}
+          <div class="col-lg-3 col-md-6">
+            <div class="single-product">
+              <div class="product-img">
+                <img class="img-fluid w-100" src="{{ item.product.thumbnail.url }}" alt="{{ item.product.name }}" />
+                <div class="p_icon">
+                  <a href="/single_product/{{ item.product.id }}/">
+                    <i class="ti-eye"></i>
+                  </a>
+                  <a href="/remove_wishlist_item/{{ item.id }}/">
+                    <i class="fa fa-heart"></i>
+                  </a>
+                  <a href="/remove_item/{{ item.id }}/" title="Remove item" onclick="return confirm('Are you sure you want to remove this item from cart?');">
+                    <i class="ti-close"></i>
+                  </a>       
+                </div>
+              </div>
+              <div class="product-btm" onclick="window.location.href = '/single_product/{{ item.id }}/';">
+                <a href="/single_product/{{ item.id }}/" class="d-block">
+                  <h4>{{ item.product.name }}</h4>
+                </a>
+                <div class="mt-3" onclick="window.location.href = '/single_product/{{ item.id }}/';">
+                  {% if item.offer_amount and item.coupon_amount %}
+                    <h5>₹{{ item.coupon_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                    <del>₹{{ item.offer_amount|floatcomma_indian|remove_decimal_if_zero }}</del>
+                  {% elif item.coupon_amount %}
+                    <h5>₹{{ item.coupon_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                    <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                  {% elif item.offer_amount %}
+                    <h5>₹{{ item.offer_amount|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                    <del>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</del>
+                  {% else %}
+                    <h5>₹{{ item.product.price|floatcomma_indian|remove_decimal_if_zero }}</h5>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}        
+        {% endif %}    
+      </div>
+    </div>
+  </section>
+  <!--================ End Cart Waitlist Area =================--> 
+  {% endif %} 
+  {%endblock%}
+  <!--================ End Blog Area =================-->
+
+  <!--================ start footer Area  =================-->
+  <footer class="footer-area section_gap">
+    <div class="container">
+      <img src="{% static 'img/logo-white.png' %}" style="width: 20%;" alt="Eiser-logo" />
+      <div class="footer-bottom row align-items-center">
+        <p class="footer-text m-0 col-lg-8 col-md-12"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+        <div class="col-lg-4 col-md-12 footer-social">
+          <a href="#"><i class="fa fa-facebook"></i></a>
+          <a href="#"><i class="fa fa-twitter"></i></a>
+          <a href="#"><i class="fa fa-dribbble"></i></a>
+          <a href="#"><i class="fa fa-behance"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!--================ End footer Area  =================-->
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+        // Add click event listener to each nav link
+        $('.nav-link').click(function() {
+            // Remove the 'active' class from all nav items
+            $('.nav-link').removeClass('active');
+
+            // Add the 'active' class to the clicked nav item
+            $(this).addClass('active');
+        });
+    });
+  </script>
+  <script src="{% static 'js/popper.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/stellar.js' %}"></script>
+  <script src="{% static 'vendors/lightbox/simpleLightbox.min.js' %}"></script>
+  <script>
+    $(document).ready(function() {
+        // Initialize lightbox for each product's images separately
+        $('.lightbox-trigger').simpleLightbox({
+            // Additional options if needed
+            uniqueImages: true, // Ensure images are unique to their group
+        });
+    });
+  </script>
+  <script src="{% static 'vendors/nice-select/js/jquery.nice-select.min.js '%}"></script>
+  <script src="{% static 'vendors/isotope/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendors/isotope/isotope-min.js' %}"></script>
+  <script src="{% static 'vendors/owl-carousel/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'js/jquery.ajaxchimp.min.js' %}"></script>
+  <script src="{% static 'vendors/counter-up/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'vendors/counter-up/jquery.counterup.js' %}"></script>
+  <script src="{% static 'js/mail-script.js' %}"></script>
+  <script src="{% static 'vendors/jquery-ui/jquery-ui.js' %}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
+  <!-- <script src="{% static 'js/contact.js' %}"></script> -->
+  <script src="{% static 'js/theme.js' %}"></script>
+  <script src="{% static 'js/category.js' %}"></script>
+  <script src="{% static 'js/rating.js' %}"></script>
+  <script src="{% static 'js/search.js' %}"></script>
+  <!--Slick JS-->
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>  
+  <script src="{% static 'js/slider.js' %}"></script>
+  <!-- DataTables JS -->
+  <script type="text/javascript" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+  <script>
+    $(document).ready(function() {
+      console.log("Initializing DataTables..."); // Debugging
+      var table = $('.table').DataTable({
+        "paging": true, // Enable pagination
+        "pageLength": 5, // Set default rows per page
+        "lengthMenu": [5, 10, 25, 50, 100], // Rows per page options
+        "searching": true, // Enable search functionality
+        "ordering": true, // Enable column sorting
+        "info": true, // Show table information
+        "autoWidth": false, // Disable automatic column width calculation
+        "responsive": true, // Enable responsive design
+      });
+  
+      console.log("DataTables initialized successfully!"); // Debugging
+    });
+  </script>
+</body>
+
+</html>
