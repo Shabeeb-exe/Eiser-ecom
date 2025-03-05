@@ -1,0 +1,145 @@
+{% extends 'seller-dashboard.html' %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  {% load static %}
+  {% load indian_numbers_tags %}
+  <title>{% block title %}Inventory - Eiser{% endblock %}</title>
+</head>
+<body>
+  {%block body%}
+  <!--================Home Banner Area =================-->
+  <section class="banner_area">
+    <div class="banner_inner d-flex align-items-center">
+      <div class="container">
+        <div class="banner_content d-md-flex justify-content-between align-items-center">
+          <div class="mb-3 mb-md-0">
+            <h2>inventory</h2>
+            <p>Manage your products in stock.</p>
+          </div>
+          <div class="page_link">
+            <a href="/seller_dashboard/">Home</a>
+            <a href="/inventory/">Inventory</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!--================End Home Banner Area =================-->
+  <section class="cart_area">
+    <div class="container">
+      <div class="cart_inner">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sl No.</th>
+                        <th>Product</th>
+                        <th>In Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td class="d-flex">
+                          <div style="position: relative; display: inline-block; width: 120px; height: 120px; overflow: hidden;">
+                            <img
+                              src="{{ product.thumbnail.url }}"
+                              alt="{{ product.name }}"
+                              style="width: 100%; height: 100%; object-fit: contain; background-color: #f0f0f0;"
+                            />
+                          </div>
+                          <div>{{ product.name }}</div>
+                        </td>                        
+                        <td>
+                          <div class="d-flex align-items-center">
+                            <div class="product_count">
+                              <input
+                                  type="text"
+                                  name="instock"
+                                  id="sst-{{ product.id }}"
+                                  maxlength="12"
+                                  value="{{ product.instock }}"
+                                  title="Quantity In Stock:"
+                                  class="input-text qty"
+                              />
+                              <button
+                                  onclick="increaseQuantity({{ product.id }}); return false"
+                                  class="increase items-count"
+                                  type="button"
+                              >
+                                  <i class="lnr lnr-chevron-up"></i>
+                              </button>
+                              <button
+                                  onclick="decreaseQuantity({{ product.id }}); return false;"
+                                  class="reduced items-count"
+                                  type="button"
+                              >
+                                  <i class="lnr lnr-chevron-down"></i>
+                              </button>
+                            </div> 
+                            <a class="ml-2" href="#" onclick="updateQuantity({{ product.id }}); return false;" title="Update quantity">
+                              <i class="lnr lnr-sync" style="font-size: 20px;"></i>
+                            </a>
+                          </div>  
+                        </td>
+                        
+                    </tr>                
+                    {% empty %}
+                    <tr>
+                      <td colspan="5" class="text-center">Inventory Empty.</td>
+                    </tr>
+                    <tr><td colspan="5"></td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>    
+      </div>
+    </div>
+  </section>
+
+
+  <script>
+    // Function to increase quantity
+    function increaseQuantity(ProductId) {
+      var result = document.getElementById('sst-'+ ProductId);
+      var sst = result.value;
+      if (!isNaN(sst)) {
+        result.value = parseInt(sst) + 1;
+      }
+    }
+  
+    // Function to decrease quantity
+    function decreaseQuantity(ProductId) {
+      var result = document.getElementById('sst-'+ ProductId);
+      var sst = result.value;
+      if (!isNaN(sst) && sst > 0) {
+        result.value = parseInt(sst) - 1;
+      }
+    }
+  
+    // Function to update quantity using AJAX
+    function updateQuantity(ProductId) {
+      var quantity = document.getElementById('sst-'+ ProductId).value;
+  
+      // Send AJAX request to update the quantity
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "/inventory_post/" + ProductId + "/", true);
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");  // CSRF Token for security
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          alert("Stock updated successfully!");
+          window.location.href = "/inventory/"; 
+        } else {
+          alert("Failed to update stock.");
+        }
+      };
+      xhr.send("instock=" + quantity);  // Sending the updated quantity to the server
+    }
+  </script> 
+{%endblock%}    
+</body>
+</html>
